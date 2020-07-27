@@ -15,7 +15,7 @@ def send_email(detail):
 
     email = EmailMessage()
     email["from"] = "PiZen"
-    email["to"] = ["ahhzen@yahoo.com", "ahhzen@gmail.com"]
+    email["to"] = ["dummy@yahoo.com", "dummy@gmail.com"]
     email["subject"] = "You are PWNED!"
 
     template = populate_template(detail)
