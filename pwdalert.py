@@ -62,17 +62,21 @@ def pwned_api_check(sha1password):
 
 
 def main():
-    pwdlist = read_pwd_file()
-    pwned = 0
-    for pwd in pwdlist:
-        count = pwned_api_check(pwd)
-        if count > 0:
-            print(f"Your password '{pwd}' has been used {count} before")
-            pwned += 1
-        else:
-            print(f"Your password '{pwd}' seems ok for now. Check again sometime later")
+    try:
+        pwdlist = read_pwd_file()
+        pwned = 0
+        for pwd in pwdlist:
+            count = pwned_api_check(pwd)
+            if count > 0:
+                print(f"Your password '{pwd}' has been used {count} before")
+                pwned += 1
+            else:
+                print(f"Your password '{pwd}' seems ok for now. Check again sometime later")
 
-    send_alert(pwned)
+        send_alert(pwned)
+    except Exception as err:
+        print(f"Something went wrong...{err}")
+
 
 
 def send_alert(pwned):
@@ -92,13 +96,16 @@ def read_pwd_file():
 
     fullpath = Path(get_project_path(), pinfo.FILENAME)
 
-    with open(fullpath, "r") as file:
-        pwdlist = file.readlines()
-        for line in pwdlist:
-            line = line.rstrip("\n")
-            outlist.append(line)
+    try:
+        with open(fullpath, "r") as file:
+            pwdlist = file.readlines()
+            for line in pwdlist:
+                line = line.rstrip("\n")
+                outlist.append(line)
 
-    return outlist
+        return outlist
+    except:
+        raise Exception(f"{pinfo.FILENAME} not exists".upper())
 
 if __name__ == "__main__":
     sys.exit(main())
